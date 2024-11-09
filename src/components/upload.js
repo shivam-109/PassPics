@@ -10,6 +10,7 @@ function Upload() {
   const [file, setFile] = useState(null);
   const [photoURL, setPhotoURL] = useState("");
   const [croppedImage, setCroppedImage] = useState("");
+  const [isImageCropped, setIsImageCropped] = useState(false); // Track if the image has been cropped
   const cropperRef = useRef(null);
 
   const countries = {
@@ -176,19 +177,19 @@ function Upload() {
     setFile(selectedFile);
     if (selectedFile) {
       setPhotoURL(URL.createObjectURL(selectedFile));
+      setIsImageCropped(false); // Reset cropping state
     }
   };
 
   const handleCrop = () => {
     if (cropperRef.current) {
-      const cropper = cropperRef.current.cropper; // Access the cropper instance
+      const cropper = cropperRef.current; // Directly access the cropper instance
       if (cropper) {
-        // Ensure cropper is defined
         const croppedCanvas = cropper.getCroppedCanvas(); // Get the cropped canvas
         if (croppedCanvas) {
-          // Check if croppedCanvas is valid
           const croppedData = croppedCanvas.toDataURL(); // Convert canvas to data URL
           setCroppedImage(croppedData); // Set the cropped image state
+          setIsImageCropped(true); // Set state to true after cropping
         } else {
           console.error("Cropped canvas is not valid.");
         }
@@ -198,14 +199,45 @@ function Upload() {
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (file && selectedCountry && croppedImage) {
-      alert(`File: ${file.name} uploaded successfully for ${selectedCountry}`);
-      // You can also handle the upload of the cropped image here.
+      try {
+        const response = await fetch("http://localhost:5001/upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: "user@example.com",
+            imageData: croppedImage,
+          }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+        } else {
+          alert(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Upload failed, please try again.");
+      }
     } else {
       alert(
         "Please select a file, crop it, and select a country before uploading."
       );
+    }
+  };
+
+  const handleDownload = () => {
+    if (isImageCropped) {
+      const link = document.createElement("a");
+      link.href = croppedImage;
+      link.download = "passport-photo.png";
+      link.click();
+    } else {
+      alert("Please crop the image before downloading.");
     }
   };
 
@@ -250,12 +282,11 @@ function Upload() {
                   src={photoURL}
                   ref={cropperRef}
                   style={{ height: 400, width: "100%" }}
-                  // Cropper.js options
                   aspectRatio={1}
                   guides={false}
                   viewMode={1}
                   onInitialized={(instance) => {
-                    cropperRef.current = instance; // Save the instance
+                    cropperRef.current = instance;
                   }}
                 />
                 <button onClick={handleCrop} className="btn btn-crop">
@@ -289,7 +320,9 @@ function Upload() {
           <button onClick={handleUpload} className="btn btn-upload">
             Upload
           </button>
-          <button className="btn btn-download">Download</button>
+          <button onClick={handleDownload} className="btn btn-download">
+            Download
+          </button>
         </footer>
       </main>
 
