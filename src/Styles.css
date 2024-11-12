@@ -242,6 +242,58 @@ body {
   border-radius: 10px; 
 }
 
+
+/* Mobile styling for content section */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .left-section,
+  .image-section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .intro-text h2 {
+    font-size: 1.5rem;
+  }
+
+  .intro-text p {
+    font-size: 0.95rem;
+  }
+
+  .cards-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+  }
+
+  .card-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .image-section img {
+    width: 90%;
+    max-width: 300px;
+    height: auto;
+  }
+}
+
+
+
+
+
 /* Reviews section */
 .reviews-section {
   padding: 20px;
@@ -295,6 +347,43 @@ body {
   margin-right: 10px; 
 }
 
+/* Mobile styling for the reviews section */
+@media (max-width: 768px) {
+  .reviews-section {
+    padding: 15px;
+  }
+
+  .review-cards {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .review-card {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .review-header h3 {
+    font-size: 1rem;
+  }
+
+  .stars {
+    font-size: 1.2rem;
+  }
+
+  .profile-image {
+    width: 35px;
+    height: 35px;
+    margin-right: 8px;
+  }
+
+  .review-card p {
+    font-size: 0.9rem;
+  }
+}
+
+
+
 /* Auth container (Sign In/Sign Up) */
 .auth-container {
   display: flex;
@@ -337,6 +426,40 @@ body {
   max-width: 100%;
   height: auto;
 }
+
+/* Mobile styling for the signin/signup */
+@media (max-width: 768px) {
+  .auth-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .form-box {
+    width: 100%;
+  }
+
+  .image-box {
+    width: 80%;
+    margin-top: 20px;
+  }
+
+  .form-control {
+    padding: 8px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .image-box img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+
 
 /* Footer */
 .footer {
@@ -427,7 +550,7 @@ main {
 
 form {
   width: 100%;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   align-items: center;
   gap: 20px;
