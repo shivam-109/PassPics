@@ -9,10 +9,31 @@ function SignIn({ onSignIn }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => { 
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSignIn(email, password); // Assuming this function handles authentication
-    navigate("/home"); // Redirect to the home page after sign-in
+
+    try {
+      const response = await fetch('http://localhost:5001/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        localStorage.setItem("isLoggedIn", "true"); // Set login status
+        localStorage.setItem("userEmail", result.email);
+        navigate("/upload");
+      } else {
+        const result = await response.json();
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error during login');
+    }
   };
 
   return (

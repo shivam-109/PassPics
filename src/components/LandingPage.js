@@ -2,34 +2,43 @@ import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import Header from "./Header";
 import Footer from "./Footer";
+import "../Styles.css"
+
+
 
 function LandingPage() {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
 
   const reviews = [
     {
       name: "John Doe",
       text: "PassPixx saved me hours of time! I needed photos for multiple visas, and it delivered perfect results every time.",
       rating: 5,
-      profileImage: `${process.env.PUBLIC_URL}/images/user1.png`,
+      profileImage: `${process.env.PUBLIC_URL}/images/profile.png`,
     },
     {
       name: "User 2",
       text: "The process was simple and the photos turned out great! Highly recommend PassPixx.",
       rating: 5,
-      profileImage: `${process.env.PUBLIC_URL}/images/user2.png`,
+      profileImage: `${process.env.PUBLIC_URL}/images/profile.png`,
     },
     {
       name: "User 3",
       text: "I was impressed with how quick and easy it was to get my passport photo. Will use again!",
       rating: 5,
-      profileImage: `${process.env.PUBLIC_URL}/images/user3.png`,
+      profileImage: `${process.env.PUBLIC_URL}/images/profile.png`,
     },
   ];
 
   // Function to handle the click event for "Get Started" button
   const handleGetStarted = () => {
-    navigate("/signin"); // Redirect to the sign-in page
+    const isLoggedIn = localStorage.getItem("isLoggedIn"); 
+
+    if (isLoggedIn) {
+      navigate("/upload"); 
+    } else {
+      navigate("/signin"); 
+    }
   };
 
   return (
@@ -111,34 +120,24 @@ function LandingPage() {
           />
         </div>
       </div>
+      
       <div className="reviews-section">
         <h2>What Our Users Say</h2>
-        <p>
-          Don't just take our word for it. Here's what our satisfied customers
-          have to say about PassPixx.
-        </p>
+        <p>Don't just take our word for it. Here's what our satisfied customers have to say about PassPixx.</p>
         <div className="review-cards">
           {reviews.map((review, index) => (
             <div className="review-card" key={index}>
               <div className="review-header">
-                <img
-                  src={review.profileImage}
-                  alt={`${review.name} profile`}
-                  className="profile-image"
-                />
+                <img src={review.profileImage} alt={`${review.name} profile`} className="profile-image" />
                 <h3>{review.name}</h3>
               </div>
               <p>{review.text}</p>
               <div className="stars">
                 {[...Array(review.rating)].map((_, i) => (
-                  <span key={i} className="star">
-                    ★
-                  </span>
+                  <span key={i} className="star">★</span>
                 ))}
                 {[...Array(5 - review.rating)].map((_, i) => (
-                  <span key={i + review.rating} className="star empty">
-                    ★
-                  </span>
+                  <span key={i + review.rating} className="star empty">★</span>
                 ))}
               </div>
             </div>

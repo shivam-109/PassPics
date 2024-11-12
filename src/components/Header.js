@@ -1,38 +1,65 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "../Styles.css"; // Make sure the path is correct
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../Styles.css";
 
 function Header() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  // Check login status 
+  useEffect(() => {
+    const userLoggedIn = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(userLoggedIn === "true");
+  }, []);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    navigate("/signin"); 
+  };
+
+  const handleGetStarted = () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn"); 
+
+    if (isLoggedIn) {
+      navigate("/profile"); 
+    } else {
+      navigate("/signin"); 
+    }
+  };
+
   return (
     <header className="header">
       <div className="container header-container">
         <div className="logo">
-          {/* <img
-            src={`${process.env.PUBLIC_URL}/images/logo.png`}
-            alt="Website Logo"
-          /> */}
           <span className="logo-name">PassPix</span>
         </div>
         <nav className="nav-links">
           <ul>
-            {/* <li>
-              <Link to="/signin">Sign In</Link>
-            </li>
-            <li>
-              <Link to="/signup">Sign Up</Link>
-            </li> */}
+
             <li>
               <Link to="/landingpage">Home</Link>
             </li>
             <li>
-              <Link to="/profile">
-                <img
-                  src={`${process.env.PUBLIC_URL}/images/profile.png`} // Replace with your profile icon path
-                  alt="Profile"
-                  className="profile-icon" // Add a class for styling if needed
-                />
-              </Link>
+              {isLoggedIn ? (
+
+                <Link to="/signin" onClick={handleLogout}>
+                  Logout
+                </Link>
+              ) : (
+                <Link to="/signin">Sign In</Link>
+              )}
             </li>
+            <li>
+                  <img
+                    onClick={handleGetStarted}
+                    src={`${process.env.PUBLIC_URL}/images/profile.png`}
+                    alt="Profile"
+                    className="profile-icon"
+                  />
+            </li>
+
           </ul>
         </nav>
       </div>
