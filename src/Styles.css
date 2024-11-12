@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 /* Reset styles */
 * {
   margin: 0;
@@ -8,7 +10,7 @@
 /* General body styles */
 body {
   margin: 0;
-  font-family: "Arial", sans-serif;
+  font-family: "Poppins", "Arial", sans-serif;
   color: #333;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -25,52 +27,123 @@ body {
 }
 
 /* Header styles */
-/* Header styles */
 .header {
+  font-family: "Poppins", "Arial", sans-serif;
   background-color: #007bff; /* Header background color */
   color: white;
   padding: 10px 0; /* Header padding */
 }
 
-/* Header container */
 .header-container {
-  display: flex; /* Use flexbox for layout */
-  justify-content: space-between; /* Space between logo and nav links */
-  align-items: center; /* Center items vertically */
+  display: flex;
+  justify-content: space-between; /* Aligns items at the edges */
+  align-items: center; /* Centers items vertically */
+  width: 100%; /* Ensure it takes the full width */
 }
 
-/* Logo styles */
 .logo {
   display: flex;
   align-items: center; /* Centers logo and text vertically */
 }
 
-/* Nav links */
-.nav-links ul {
-  display: flex; /* Use flex to layout links in a row */
-  list-style: none; /* Remove bullet points */
-  padding: 0; /* Remove default padding */
-  margin: 0; /* Remove default margin */
+.logo img {
+  height: 100px; /* Adjust logo height as needed */
+  margin-right: 10px; /* Spacing between logo and name */
+}
+
+.logo-name {
+  font-size: 1.5rem; /* Adjust font size as needed */
+  font-weight: bold; /* Makes the name bold */
+  color: white; /* Ensure logo name is visible */
+}
+
+.nav-links {
+  display: flex;
 }
 
 .nav-links li {
   margin-left: 20px; /* Spacing between nav items */
 }
 
-.nav-links a {
-  color: white; /* Link color */
-  text-decoration: none; /* Remove underline from links */
-  font-size: 1rem; /* Adjust font size */
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
-.nav-links a:hover {
+.nav-links li a:hover {
   text-decoration: underline; /* Underline effect on hover */
 }
-/* Logo styles */
-.logo img {
-  height: 240px; /* Adjust logo height as needed */
-  width: 200px;
-  margin-right: 10px; /* Spacing between logo and name */
+
+.profile-icon {
+  width: 34px; /* Adjust size as needed */
+  height: 34px; /* Adjust size as needed */
+  margin-left: 10px; /* Space between Home link and profile icon */
+}
+
+* Auth Container */ .auth-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  padding: 20px; /* Padding around the container */
+  background-color: #f7f7f7; /* Light background color */
+}
+
+/* Form Box */
+.form-box {
+  background-color: white; /* White background for the form box */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 40px; /* Padding inside the form box */
+  width: 400px; /* Set a fixed width for the form box */
+  margin-right: 20px; /* Space between the form box and image */
+}
+
+/* Image Box */
+.image-box {
+  flex: 1; /* Allow the image box to take remaining space */
+  display: flex;
+  justify-content: center; /* Center the image horizontally */
+  align-items: center; /* Center the image vertically */
+}
+
+/* Image Styling */
+.image-box img {
+  max-width: 100%; /* Ensure image does not exceed its container */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Rounded corners for the image */
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 15px; /* Space below each form group */
+}
+
+/* Form Control */
+.form-control {
+  width: 100%; /* Full width */
+  padding: 12px; /* Padding inside input fields */
+  margin-top: 5px; /* Space above input fields */
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 16px; /* Font size for input */
+}
+
+/* Button */
+.btn {
+  padding: 12px; /* Padding inside button */
+  background-color: #007bff; /* Primary color for button */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  width: 100%; /* Full width for the button */
+  font-size: 16px; /* Font size for button text */
+}
+
+/* Button Hover Effect */
+.btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
 }
 
 /* Hero section styles */
@@ -296,95 +369,4 @@ body {
 
 main {
   flex: 1;
-}
-
-/* Login form and image on card using flex */
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f7f7f7;
-}
-
-.login-card {
-  display: flex;
-  background-color: white;
-  width: 800px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.login-form {
-  flex: 1;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.login-form h2 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.login-form label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-  color: #333;
-}
-
-.login-form input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.login-form button {
-  padding: 12px;
-  width: 100%;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.login-form button:hover {
-  background-color: #45a049;
-}
-
-.login-image {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #007bff;
-}
-
-.login-image img {
-  max-width: 100%;
-  height: auto;
-}
-
-@media (max-width: 768px) {
-  .login-card {
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-  }
-
-  .login-image {
-    height: 200px;
-  }
 }
