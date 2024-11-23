@@ -6,11 +6,11 @@ import SignUp from "./components/SignUp";
 import LandingPage from "./components/LandingPage";
 import Profile from "./components/Profile";
 import Upload from "./components/upload";
+import Success from "./components/Success";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
 
 function App() {
-
   return (
     <Router>
       <Routes>
@@ -20,6 +20,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/profile" element={<Profile />} />
 
+        {/* Upload Page */}
         <Route
           path="/upload"
           element={
@@ -29,6 +30,15 @@ function App() {
           }
         />
 
+        {/* Success Page */}
+        <Route
+          path="/success"
+          element={
+            <ProtectedRoute>
+              <Success />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

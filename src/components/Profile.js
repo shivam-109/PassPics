@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "../Styles.css"; 
+import Header from "./Header";
+import Footer from "./Footer";
+import "../Styles.css";
 
 function Profile() {
   const [userName, setUserName] = useState("");
@@ -7,16 +9,21 @@ function Profile() {
   const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
-    // Fetch the user's email from local storage 
+    // Fetch the user's email from local storage
     const storedEmail = localStorage.getItem("userEmail");
 
     if (storedEmail) {
       // Fetch user data from the API
       fetch(`http://localhost:5001/profile/${storedEmail}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch user profile");
+          }
+          return response.json();
+        })
         .then((data) => {
-          setUserName(data.name); 
-          setUserEmail(data.email); 
+          setUserName(data.name || "Guest");
+          setUserEmail(data.email || "No email provided");
         })
         .catch((error) => {
           console.error("Error fetching user profile:", error);
@@ -25,21 +32,27 @@ function Profile() {
 
     // Set profile image from local storage or a placeholder
     const storedProfileImage = localStorage.getItem("profileImage");
-    setProfileImage(storedProfileImage || `${process.env.PUBLIC_URL}/images/profile.png`);
+    setProfileImage(
+      storedProfileImage || `${process.env.PUBLIC_URL}/images/profile.png`
+    );
   }, []);
 
   return (
-    <div className="profile-container">
-      <div className="profile-card">
-        <img
-          src={profileImage}
-          alt="User Profile"
-          className="profile-image"
-        />
-        <h3 className="profile-name">{userName}</h3> 
-        <p className="profile-email">{userEmail}</p> 
+    <>
+      <Header /> {/* Add Header */}
+      <div className="profile-container">
+        <div className="profile-card">
+          <img
+            src={profileImage}
+            alt="User Profile"
+            className="profile-image"
+          />
+          <h3 className="profile-name">{userName}</h3>
+          <p className="profile-email">{userEmail}</p>
+        </div>
       </div>
-    </div>
+      <Footer /> {/* Add Footer */}
+    </>
   );
 }
 
