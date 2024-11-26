@@ -83,10 +83,7 @@ function Upload() {
         "POST",
         "https://face-detection14.p.rapidapi.com/v1/results?detection=true&embeddings=false"
       );
-      // xhr.setRequestHeader(
-      //   "x-rapidapi-key",
-      //   "d84f3289c2msh17bd82475b65355p1aec67jsnd6fdcf9d623b"
-      // );
+
       xhr.setRequestHeader(
         "x-rapidapi-key",
         "3323b99f07msh3bf62a46b6768a3p11a6eejsnea93802604b3"
@@ -105,12 +102,12 @@ function Upload() {
     setFile(selectedFile);
     if (selectedFile) {
       setPhotoURL(URL.createObjectURL(selectedFile));
-      cropperRef.current = null; // Reset cropper reference on new file upload
+      cropperRef.current = null;
     }
   };
 
   const handleCrop = () => {
-    const cropperInstance = cropperRef.current?.cropper; // Access the cropper instance
+    const cropperInstance = cropperRef.current?.cropper;
     if (
       !cropperInstance ||
       typeof cropperInstance.getCroppedCanvas !== "function"
@@ -196,60 +193,6 @@ function Upload() {
     }
   };
 
-  /* const handleUpload = async () => {
-    if (file && selectedCountry && croppedImage) {
-      const formData = new FormData();
-      const croppedBlob = await fetch(croppedImage).then((res) => res.blob());
-
-      const croppedFile = new File(
-        [croppedBlob],
-        `cropped_image_${selectedCountry}.png`,
-        { type: "image/png" }
-      );
-
-      const status = await faceDetect(croppedImage);
-      console.log(status);
-      if (status) {
-        alert("Face decected!!");
-        setDisableDownload(false);
-      } else {
-        alert("Please upload valid image, No face found!!");
-        setDisableDownload(true);
-      }
-
-      if (status) {
-        console.log("inside");
-        localStorage.setItem(
-          "croppedImagePath",
-          `${croppedFile.lastModified}-${croppedFile.name}`
-        );
-        localStorage.setItem("selectedCountry", selectedCountry);
-        formData.append("uploaded-image", croppedFile);
-        formData.append("selectedCountry", selectedCountry);
-        console.log("before");
-
-        try {
-          const response = await fetch("http://localhost:5001/upload", {
-            method: "POST",
-            body: formData,
-          });
-
-          const result = await response.json();
-          console.log(result);
-          alert(result.message);
-        } catch (error) {
-          console.error("Error uploading image:", error);
-          alert("Error uploading image");
-        }
-      } else {
-        alert("Upload Valid Image: No face detected!!");
-      }
-    } else {
-      alert(
-        "Please select a file, crop it, and select a country before uploading."
-      );
-    }
-  }; */
   const handleUpload = async () => {
     if (file && selectedCountry && croppedImage) {
       const formData = new FormData();

@@ -3,8 +3,8 @@ import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 
 const ImageCropper = () => {
-  const imageRef = useRef(null); // Reference for the image element
-  const [cropper, setCropper] = useState(null); // State to hold the cropper instance
+  const imageRef = useRef(null); 
+  const [cropper, setCropper] = useState(null); 
   const [croppedImage, setCroppedImage] = useState(null);
 
   useEffect(() => {

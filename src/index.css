@@ -2,7 +2,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; /* Ensure padding and border are included in width */
+  box-sizing: border-box; 
 }
 
 /* General body styles */
@@ -24,18 +24,18 @@ body {
   padding: 0 20px;
 }
 
-/* Header styles */
+
 /* Header styles */
 .header {
-  background-color: #007bff; /* Header background color */
+  background-color: #007bff; 
   color: white;
-  padding: 10px 0; /* Header padding */
+  padding: 10px 0; 
 }
 
 /* Header container */
 .header-container {
   display: flex; /* Use flexbox for layout */
-  justify-content: space-between; /* Space between logo and nav links */
+  justify-content: space-between; 
   align-items: center; /* Center items vertically */
 }
 
