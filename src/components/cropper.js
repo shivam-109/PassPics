@@ -16,7 +16,7 @@ const ImageCropper = () => {
         scalable: false,
         zoomable: false,
       });
-      setCropper(newCropper); // Store cropper instance in state
+      setCropper(newCropper); 
     }
 
     // Cleanup the cropper instance when the component unmounts
@@ -32,7 +32,7 @@ const ImageCropper = () => {
       // Check if cropper is initialized before calling getCroppedCanvas
       const canvas = cropper.getCroppedCanvas();
       if (canvas) {
-        setCroppedImage(canvas.toDataURL()); // Set the cropped image URL
+        setCroppedImage(canvas.toDataURL()); 
       }
     }
   };

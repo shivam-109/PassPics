@@ -1,12 +1,17 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
-const multer = require("multer");
-const fs = require("fs");
 const stripe = require("stripe")(
   "sk_test_51PoTqD2Kf7Wo6EqvZ48sfohq3MmvmtUCGzaNsuZB14ANUnXK7caJxwk9lG899pFaTZLo4KPKRHXWIwvza4RWuFRM00CwE8eRNs"
 );
+
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const User = require("./models/users");
 const Image = require("./models/image");
@@ -17,7 +22,6 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use("/uploads", express.static("uploads"));
 
 // MongoDB Connection
 mongoose
@@ -28,44 +32,14 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("Error connecting to MongoDB:", error));
 
-// Create uploads folder if it doesn't exist
-if (!fs.existsSync("./uploads")) {
-  fs.mkdirSync("./uploads");
-}
+// AWS S3 Client
+const s3 = new S3Client({ region: process.env.AWS_REGION });
 
-// Multer Storage Configuration
-/* const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-const upload = multer({ storage }); */
 // Middleware to generate timestamp
 app.use((req, res, next) => {
   req.uploadTimestamp = Date.now();
-  console.log("Generated Timestamp:", req.uploadTimestamp); // Debug
   next();
 });
-
-// Multer Storage Configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = "./uploads";
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    console.log("Using Timestamp for File:", req.uploadTimestamp); // Debug
-    cb(null, `${req.uploadTimestamp}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
 
 // Routes
 
@@ -118,55 +92,50 @@ app.get("/profile/:email", async (req, res) => {
   }
 });
 
-// File Upload Route
-/* app.post("/upload", upload.single("uploaded-image"), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-
-    const newImage = new Image({
-      filename: req.file.filename,
-      path: req.file.path,
-    });
-
-    await newImage.save();
-    res.json({
-      message: "File uploaded successfully",
-      filePath: req.file.path,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "File upload failed", error });
-  }
-}); */
+// File Upload Route (with S3 integration)
 app.post("/upload", upload.single("uploaded-image"), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  const fileKey = `${req.uploadTimestamp}-${req.file.originalname}`;
+  const bucketName = process.env.S3_BUCKET_NAME;
+
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: fileKey,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+      ACL: "public-read", 
+    };
 
+    await s3.send(new PutObjectCommand(uploadParams));
+
+    // Save metadata in MongoDB
     const newImage = new Image({
-      filename: req.file.filename,
-      path: req.file.path,
+      filename: fileKey,
+      path: fileKey,
     });
-
     await newImage.save();
+
     res.json({
       message: "File uploaded successfully",
-      filePath: req.file.path,
-      filename: req.file.filename, // Include the filename in the response
+      fileKey, // Key to retrieve the file from S3
+      s3Url: `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileKey}`,
     });
   } catch (error) {
+    console.error("Error uploading to S3:", error);
     res.status(500).json({ message: "File upload failed", error });
   }
 });
 
+// Download Route (Stripe integration for payment handling)
 app.get("/download/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -211,33 +180,6 @@ app.get("/download/:email", async (req, res) => {
     res.status(500).json({ message: "Error processing request." });
   }
 });
-// Stripe Checkout Session Route
-// app.post("/create-checkout-session", async (req, res) => {
-//   try {
-//     const session = await stripe.checkout.sessions.create({
-//       payment_method_types: ["card"],
-//       line_items: [
-//         {
-//           price_data: {
-//             currency: "usd",
-//             product_data: {
-//               name: "Passport Photo Download",
-//             },
-//             unit_amount: 500, // Amount in cents
-//           },
-//           quantity: 1,
-//         },
-//       ],
-//       mode: "payment",
-//       success_url: `${req.headers.origin}/success`,
-//       cancel_url: `${req.headers.origin}/upload`,
-//     });
-
-//     res.json({ id: session.id });
-//   } catch (error) {
-//     res.status(500).json({ message: "Error creating checkout session", error });
-//   }
-// });
 
 // Error Handler Middleware
 app.use((err, req, res, next) => {

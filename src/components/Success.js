@@ -6,30 +6,17 @@ function Success() {
   const [croppedImage, setCroppedImage] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [error, setError] = useState("");
-  const [backendURL, setBackendURL] = useState("");
 
-  /* useEffect(() => {
-    const imagePath = localStorage.getItem("croppedImagePath");
-    const country = localStorage.getItem("selectedCountry");
-
-    if (imagePath && country) {
-      setCroppedImage(imagePath);
-      setSelectedCountry(country);
-    } else {
-      setError("Required data is missing. Redirecting to the upload page...");
-      setTimeout(() => {
-        window.location.href = "/upload";
-      }, 3000);
-    }
-  }, []); */
+  // Retrieve S3 URL and country from localStorage
   useEffect(() => {
-    const imagePath = localStorage.getItem("croppedImagePath");
+    const s3Url = localStorage.getItem("s3ImageURL");
     const country = localStorage.getItem("selectedCountry");
 
-    if (imagePath && country) {
-      setCroppedImage(`${imagePath}`);
+    if (s3Url && country) {
+      setCroppedImage(s3Url);
       setSelectedCountry(country);
     } else {
+      console.error("Missing S3 URL or country in localStorage.");
       setError("Required data is missing. Redirecting to the upload page...");
       setTimeout(() => {
         window.location.href = "/upload";
@@ -42,27 +29,29 @@ function Success() {
       alert("No image available to download.");
       return;
     }
-
+  
     try {
-      setBackendURL("http://localhost:3000");
-      const response = await fetch(`${backendURL}/${croppedImage}`);
+      const response = await fetch(croppedImage);
+      if (!response.ok) {
+        throw new Error("Failed to fetch the image. Please try again.");
+      }
       const blob = await response.blob();
-
-      // Create a download link for the image
       const link = document.createElement("a");
       const fileType = blob.type.includes("png") ? "png" : "jpg";
       link.href = URL.createObjectURL(blob);
       link.download = `passport_photo_${selectedCountry}.${fileType}`;
       link.click();
-
-      // Revoke the object URL to free memory
       URL.revokeObjectURL(link.href);
     } catch (error) {
       console.error("Error downloading the image:", error);
-      alert("Failed to download the image. Please try again.");
+      alert("Failed to download the image. Retrying...");
+      // Retry logic
+      setTimeout(() => {
+        handleDownload();
+      }, 1000);
     }
   };
-
+  
   return (
     <div className="success-page">
       <Header />
@@ -82,7 +71,7 @@ function Success() {
               <h4>Your Cropped Photo:</h4>
               {croppedImage ? (
                 <img
-                  src={`http://localhost:8888/uploads/${croppedImage}`}
+                  src={croppedImage} // Use S3 URL here
                   alt="Cropped"
                   className="uploaded-image"
                   style={{ objectFit: "cover" }}

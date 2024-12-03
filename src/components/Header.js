@@ -33,7 +33,7 @@ function Header() {
     <header className="header">
       <div className="container header-container">
         <div className="logo">
-          {/* Use the logo directly from the public folder */}
+          {}
           <img
             src={`${process.env.PUBLIC_URL}/images/passpix.png`}
             alt="PassPix Logo"

@@ -83,7 +83,10 @@ function Upload() {
         "POST",
         "https://face-detection14.p.rapidapi.com/v1/results?detection=true&embeddings=false"
       );
-
+      // xhr.setRequestHeader(
+      //   "x-rapidapi-key",
+      //   "d84f3289c2msh17bd82475b65355p1aec67jsnd6fdcf9d623b"
+      // );
       xhr.setRequestHeader(
         "x-rapidapi-key",
         "3323b99f07msh3bf62a46b6768a3p11a6eejsnea93802604b3"
@@ -102,12 +105,12 @@ function Upload() {
     setFile(selectedFile);
     if (selectedFile) {
       setPhotoURL(URL.createObjectURL(selectedFile));
-      cropperRef.current = null;
+      cropperRef.current = null; 
     }
   };
 
   const handleCrop = () => {
-    const cropperInstance = cropperRef.current?.cropper;
+    const cropperInstance = cropperRef.current?.cropper; 
     if (
       !cropperInstance ||
       typeof cropperInstance.getCroppedCanvas !== "function"
@@ -175,7 +178,7 @@ function Upload() {
         link.download = `passport_photo_${selectedCountry}.png`;
         link.click();
         URL.revokeObjectURL(link.href);
-        // window.location.href = "/success"; // Redirect to success page
+       
       } else {
         // Paid download logic
         const { error } = await stripe.redirectToCheckout({
@@ -193,6 +196,7 @@ function Upload() {
     }
   };
 
+  
   const handleUpload = async () => {
     if (file && selectedCountry && croppedImage) {
       const formData = new FormData();
@@ -225,20 +229,16 @@ function Upload() {
         });
 
         const result = await response.json();
-        console.log(result);
-
         if (response.ok) {
-          alert(result.message);
-
-          // Save backend-generated filename to localStorage
-          localStorage.setItem("croppedImagePath", result.filename);
-          localStorage.setItem("selectedCountry", selectedCountry);
+          localStorage.setItem("s3ImageURL", result.s3Url); 
+          localStorage.setItem("selectedCountry", selectedCountry); 
+          alert("File uploaded successfully!");
         } else {
           alert("Error uploading image.");
         }
       } catch (error) {
         console.error("Error uploading image:", error);
-        alert("Error uploading image");
+        alert("Error uploading image.");
       }
     } else {
       alert(
@@ -298,7 +298,7 @@ function Upload() {
                     guides={false}
                     viewMode={1}
                     onInitialized={(instance) => {
-                      cropperRef.current = { cropper: instance }; // Properly set the instance
+                      cropperRef.current = { cropper: instance }; 
                     }}
                   />
 
