@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/PassPics/static/css/main.a1f1e28f.css",
+    "main.js": "/PassPics/static/js/main.ed3404d2.js",
+    "static/media/background.jpeg": "/PassPics/static/media/background.9df37c443fdd63c48f3a.jpeg",
+    "index.html": "/PassPics/index.html",
+    "main.a1f1e28f.css.map": "/PassPics/static/css/main.a1f1e28f.css.map",
+    "main.ed3404d2.js.map": "/PassPics/static/js/main.ed3404d2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a1f1e28f.css",
+    "static/js/main.ed3404d2.js"
+  ]
+}
