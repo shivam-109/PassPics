@@ -29,7 +29,7 @@ function Success() {
       alert("No image available to download.");
       return;
     }
-  
+
     try {
       const response = await fetch(croppedImage);
       if (!response.ok) {
@@ -44,14 +44,14 @@ function Success() {
       URL.revokeObjectURL(link.href);
     } catch (error) {
       console.error("Error downloading the image:", error);
-      alert("Failed to download the image. Retrying...");
+      alert("Downloading Your Image...");
       // Retry logic
       setTimeout(() => {
         handleDownload();
       }, 1000);
     }
   };
-  
+
   return (
     <div className="success-page">
       <Header />

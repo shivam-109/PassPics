@@ -33,11 +33,10 @@ function Header() {
     <header className="header">
       <div className="container header-container">
         <div className="logo">
-          {}
           <img
             src={`${process.env.PUBLIC_URL}/images/passpix.png`}
             alt="PassPix Logo"
-            style={{ height: "25px" }}
+            className="logo-img"
           />
         </div>
         <nav className="nav-links">

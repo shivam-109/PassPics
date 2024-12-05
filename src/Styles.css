@@ -23,59 +23,86 @@ body {
   padding: 0 20px;
 }
 
+/* Header */
+/* Header */
 .header {
   width: 100%;
-  font-family: "Poppins", "Arial", sans-serif;
   background-color: #007bff;
   color: white;
-  padding: 10px 0;
+  padding: 10px 20px; /* Adjusted padding for a compact header */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better definition */
 }
 
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  max-width: 1200px; /* Limit the width for consistent appearance */
+  margin: 0 auto; /* Center the content */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
+/* Logo */
 .logo {
   display: flex;
   align-items: center;
 }
 
 .logo img {
-  height: 100px;
+  height: 40px; /* Reduce logo height */
   margin-right: 10px;
 }
 
-.logo-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-}
-
-.nav-links {
+/* Navigation Links */
+.nav-links ul {
   display: flex;
+  list-style: none;
+  gap: 15px; /* Reduce spacing between links */
+  margin: 0;
+  padding: 0;
 }
 
-.nav-links li {
-  margin-left: 20px;
-}
-
-.nav-links li a {
-  color: white;
+.nav-links a {
   text-decoration: none;
+  color: white;
   font-size: 1rem;
+  font-weight: 500;
 }
 
-.nav-links li a:hover {
+.nav-links a:hover {
   text-decoration: underline;
 }
 
+/* Profile Icon */
 .profile-icon {
-  width: 34px;
-  height: 34px;
-  margin-left: 10px;
+  width: 35px; /* Reduced size for profile icon */
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;
+    text-align: center;
+  }
+
+  .nav-links ul {
+    flex-direction: column; /* Stack navigation links */
+    gap: 10px; /* Reduce spacing between stacked links */
+  }
+
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .profile-icon {
+    width: 30px; /* Smaller size for profile icon on small screens */
+    height: 30px;
+  }
 }
 
 /* Auth Container */
@@ -145,20 +172,54 @@ body {
 
 /* Hero section styles */
 .hero-section {
-  background-color: #000000;
+  position: relative;
+  background: url("../public/images/background.jpeg") no-repeat center center;
   background-size: cover;
-  background-position: center;
   height: 50vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: white;
   margin-top: 20px;
+  color: white;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.6
+  ); /* Increased opacity for darker overlay */
+  z-index: 1;
 }
 
 .hero-text {
+  position: relative;
+  z-index: 2; /* Ensure text appears above the overlay */
   max-width: 600px;
+  background: rgba(0, 0, 0, 0.8); /* Darker background for text block */
+  padding: 30px; /* Increased padding for better spacing */
+  border-radius: 10px;
+  color: white;
+}
+
+.hero-text h1 {
+  font-size: 2rem; /* Adjust font size for visibility */
+  margin-bottom: 10px;
+  color: #fff; /* Ensure the header remains white */
+}
+
+.hero-text p {
+  font-size: 1.2rem; /* Larger font size for better readability */
+  line-height: 1.5;
+  color: #f0f0f0; /* Softer white for text */
 }
 
 .hero-button {
@@ -170,6 +231,11 @@ body {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #0056b3;
 }
 
 /* Content section */

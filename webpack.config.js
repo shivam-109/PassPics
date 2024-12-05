@@ -6,7 +6,7 @@ module.exports = {
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
+    filename: "bundle.[contenthash].js",
     publicPath: "/",
   },
   resolve: {
@@ -24,7 +24,11 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
+        test: /\.(png|jpg|jpeg|gif|svg|ico)$/i,
+        type: "asset/resource",
+      },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|mp4|webm)$/i,
         type: "asset/resource",
       },
     ],
@@ -32,11 +36,11 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-      favicon: "./public/favicon.ico",
+      favicon: "./public/images/pass-pix.svg",
     }),
     new InjectManifest({
-      swSrc: "./src/serviceWorker.js", 
-      swDest: "service-worker.js", 
+      swSrc: "./src/serviceWorker.js",
+      swDest: "service-worker.js",
     }),
   ],
   devServer: {
@@ -44,5 +48,14 @@ module.exports = {
     open: true,
     hot: true,
     port: 3000,
+    proxy: {
+      "/ws": {
+        target: "http://localhost:5000",
+        ws: true,
+      },
+    },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
   },
 };
